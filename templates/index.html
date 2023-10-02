@@ -1,0 +1,65 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="container text-center mt-5">
+    <h1>Star Wars universe planets</h1>
+
+    <div class="my-3">
+        <form action="/planets" method="post" class="d-inline-block">
+            <button type="submit" name="prevbutton" value="{{data['previous']}}" class="btn btn-primary me-2">Previous 10</button>
+        </form>
+        <form action="/planets" method="post" class="d-inline-block">
+            <button type="submit" name="nextbutton" value="{{data['next']}}" class="btn btn-primary">Next 10</button>
+        </form>
+    </div>
+
+    <div class="row bg-light border-bottom">
+        {% for heading in ['Name', 'Diameter', 'Climate', 'Terrain', 'Surface water', 'Population', 'Residents'] %}
+            <div class="col p-3 border-end text-center">
+                <strong>{{ heading }}</strong>
+            </div>
+        {% endfor %}
+    </div>
+
+    {% for list in data['results'] %}
+        <div class="row bg-light my-2">
+            <div class="col  height">{{ list.name }}</div>
+            <div class="col  height">{{ "{:,.0f}km".format(list.diameter|float) }}</div>
+            <div class="col  height">{{ list.climate }}</div>
+            <div class="col  height">{{ list.terrain }}</div>
+            <div class="col  height">{{ list.surface_water if list.surface_water == 'unknown' else "{}%".format(list.surface_water) }}</div>
+            <div class="col  height">{{ list.population if list.population == 'unknown' else "{:,.0f} people".format(list.population|float) }}</div>
+            <div class="col  height">
+                {% if list.residents|length == 0 %}
+                    No known residents.
+                {% else %}
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#residentModal" onclick='getResidentsLink("{{list.residents}}")'>
+                        {{ "{} resident(s)".format(list.residents|length) }}
+                    </button>
+                {% endif %}
+            </div>
+        </div>
+    {% endfor %}
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-A3rJD856KowSb7dwlZdYEkO39Gagi7vIsF0jrRAoQmDKKtQBHUuLZ9AsSv4jD4Xa" crossorigin="anonymous"></script>
+
+<!-- Modal -->
+<div class="modal fade" id="residentModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="container text-center" id="modalcontent">
+                    ...
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

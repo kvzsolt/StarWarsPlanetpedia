@@ -1,0 +1,21 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="container text-center mt-5">
+    <h2>Login</h2>
+    <form class="form-horizontal mt-4" action='/login' method="POST">
+        <div class="mb-3">
+            <label for="username" class="form-label">Username</label>
+            <input type="text" id="username" name="username" placeholder="Username" class="form-control">
+        </div>
+
+        <div class="mb-3">
+            <label for="password" class="form-label">Password</label>
+            <input type="password" id="password" name="password" placeholder="Password" class="form-control">
+        </div>
+
+        <div>
+            <button type=submit class="btn btn-success">Login</button>
+        </div>
+    </form>
+</div>
+{% endblock %}
